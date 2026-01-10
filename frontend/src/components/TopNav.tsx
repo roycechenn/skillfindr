@@ -45,8 +45,6 @@ export function TopNav() {
         ) : (
           <>
             <Link href="/login">Login</Link>
-            <Link href="/signup">Signup</Link>
-            <Link href="/matches">Matches</Link>
           </>
         )}
       </nav>

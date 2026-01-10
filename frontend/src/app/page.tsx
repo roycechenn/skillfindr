@@ -32,7 +32,7 @@ export default function Page() {
               </>
             ) : (
               <>
-                <Link className="btn btn-primary" href="/signup">
+                <Link className="btn btn-primary" href="/login">
                   Start a swap
                 </Link>
                 <Link className="btn" href="/login">
