@@ -8,17 +8,17 @@ import { AvailabilitySlot, SkillInterest } from "../../lib/types";
 const presets = ["Python", "C++", "React", "UI Design", "Figma", "Public Speaking", "French", "Guitar", "SQL", "Cloud"];
 
 export default function ProfilePage() {
-  const [name, setName] = useState("Kunal");
-  const [location, setLocation] = useState("Remote");
-  const [bio, setBio] = useState("Engineer who loves exchanging knowledge and shipping projects.");
-  const [teach, setTeach] = useState<SkillInterest[]>([{ name: "Python", level: "advanced" }]);
-  const [learn, setLearn] = useState<SkillInterest[]>([{ name: "C++", level: "beginner" }]);
-  const [availability, setAvailability] = useState<AvailabilitySlot[]>([{ day: "Saturday", start: "14:00", end: "15:00", timezone: "UTC" }]);
-  const [status, setStatus] = useState("Profile not saved yet");
+  const [name, setName] = useState("");
+  const [location, setLocation] = useState("");
+  const [bio, setBio] = useState("");
+  const [teach, setTeach] = useState<SkillInterest[]>([]);
+  const [learn, setLearn] = useState<SkillInterest[]>([]);
+  const [availability, setAvailability] = useState<AvailabilitySlot[]>([]);
+  const [status, setStatus] = useState("");
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    setStatus("Profile saved. Your matches will update.");
+    setStatus("Profile saved locally. Connect this form to the backend to persist.");
   };
 
   return (
@@ -52,7 +52,7 @@ export default function ProfilePage() {
           </button>
         </div>
 
-        <p className="muted">{status}</p>
+        {status && <p className="muted">{status}</p>}
       </form>
 
       <SkillPicker title="I can teach" presetSkills={presets} selections={teach} onChange={setTeach} />

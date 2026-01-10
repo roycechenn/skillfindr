@@ -4,9 +4,9 @@ import { FormEvent, useState } from "react";
 import { fakeLogin } from "../../lib/auth";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("kunal@example.com");
-  const [password, setPassword] = useState("supersecure");
-  const [status, setStatus] = useState("Sign in to keep swapping");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [status, setStatus] = useState("");
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
@@ -32,7 +32,7 @@ export default function LoginPage() {
       <button className="btn btn-primary" type="submit">
         Login
       </button>
-      <p className="muted">{status}</p>
+      {status && <p className="muted">{status}</p>}
       <p className="muted">
         New here? <a href="/signup">Create an account</a>
       </p>

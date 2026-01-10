@@ -12,8 +12,8 @@ export default function Page() {
             <a className="btn btn-primary" href="/signup">
               Start a swap
             </a>
-            <a className="btn" href="/onboarding">
-              Preview onboarding
+            <a className="btn" href="/matches">
+              See matches
             </a>
           </div>
         </div>

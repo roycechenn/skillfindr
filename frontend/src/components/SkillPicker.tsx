@@ -13,9 +13,9 @@ interface SkillPickerProps {
 const levels: SkillLevel[] = ["beginner", "intermediate", "advanced"];
 
 export function SkillPicker({ title, presetSkills, selections, onChange }: SkillPickerProps) {
-  const [draftSkill, setDraftSkill] = useState(""");
+  const [draftSkill, setDraftSkill] = useState("");
   const [draftLevel, setDraftLevel] = useState<SkillLevel>("intermediate");
-  const [draftGoal, setDraftGoal] = useState(""");
+  const [draftGoal, setDraftGoal] = useState("");
 
   const toggleSkill = (skill: string) => {
     const exists = selections.find((s) => s.name.toLowerCase() === skill.toLowerCase());
@@ -44,8 +44,8 @@ export function SkillPicker({ title, presetSkills, selections, onChange }: Skill
     }
 
     onChange(updated);
-    setDraftSkill(""");
-    setDraftGoal(""");
+    setDraftSkill("");
+    setDraftGoal("");
   };
 
   return (
