@@ -4,15 +4,36 @@ import { useEffect, useState } from "react";
 import { MatchCard } from "../../components/MatchCard";
 import { Match } from "../../lib/types";
 import { isLoggedIn } from "../../lib/auth";
+import { apiClient } from "../../lib/api";
 
 export default function MatchesPage() {
-  const [matches] = useState<Match[]>([]);
-  const [message, setMessage] = useState("No matches yet. Finish your signup to see suggestions.");
+  const [matches, setMatches] = useState<Match[]>([]);
+  const [message, setMessage] = useState("Loading matches...");
   const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoggedIn(isLoggedIn());
   }, []);
+
+  useEffect(() => {
+    const fetchMatches = async () => {
+      if (!loggedIn) {
+        setLoading(false);
+        return;
+      }
+      try {
+        const data = await apiClient<Match[]>("/api/v1/matches");
+        setMatches(data);
+        setMessage(data.length ? "" : "No matches yet. Update your profile to see suggestions.");
+      } catch (error: any) {
+        setMessage(error?.message ?? "Failed to load matches.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMatches();
+  }, [loggedIn]);
 
   const handlePropose = (matchId: string) => {
     setMessage(`Proposal sent. Swap ${matchId} will update once the backend responds.`);
@@ -23,7 +44,7 @@ export default function MatchesPage() {
       <div className="card">
         <div className="section-title">
           <span className="badge">Matches</span>
-          <span className="muted">Ready when your profile is saved</span>
+          <span className="muted">{loggedIn ? "Personalized suggestions" : "Requires login"}</span>
         </div>
         <p className="muted" style={{ margin: 0 }}>
           These people want what you offer and can offer what you want. We look at skill fit, timezone overlap, and goals to rank them.
@@ -33,13 +54,19 @@ export default function MatchesPage() {
       {!loggedIn ? (
         <div className="card">
           <p className="muted" style={{ margin: 0 }}>
-            Please log in to see your matches. We will fetch them once the backend auth is wired up.
+            Please log in to see your matches.
+          </p>
+        </div>
+      ) : loading ? (
+        <div className="card">
+          <p className="muted" style={{ margin: 0 }}>
+            Loading matches...
           </p>
         </div>
       ) : matches.length === 0 ? (
         <div className="card">
           <p className="muted" style={{ margin: 0 }}>
-            Waiting on matches from the backend. Once your profile is saved, we’ll show ranked partners here.
+            No matches yet. Update your profile and availability to get recommendations.
           </p>
         </div>
       ) : (
