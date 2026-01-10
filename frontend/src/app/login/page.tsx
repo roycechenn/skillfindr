@@ -36,9 +36,7 @@ export default function LoginPage() {
         Login
       </button>
       {status && <p className="muted">{status}</p>}
-      <p className="muted">
-        New here? <a href="/signup">Create an account</a>
-      </p>
+      <p className="muted">New here? Create an account</p>
     </form>
   );
 }
