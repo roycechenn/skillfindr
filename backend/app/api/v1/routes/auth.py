@@ -4,7 +4,8 @@ from passlib.context import CryptContext
 
 
 router = APIRouter()
-pwd_ctx = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Use a pure-Python hash to avoid external bcrypt backend issues in this environment.
+pwd_ctx = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
 
 class SignupPayload(BaseModel):

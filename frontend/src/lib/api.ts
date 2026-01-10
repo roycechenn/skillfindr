@@ -13,7 +13,18 @@ export async function apiClient<T>(path: string, init: RequestInit = {}): Promis
   });
 
   if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`);
+    let detail = `Request failed with status ${response.status}`;
+    try {
+      const data = await response.json();
+      if (typeof data?.detail === "string") {
+        detail = data.detail;
+      } else if (Array.isArray(data?.detail) && data.detail[0]?.msg) {
+        detail = data.detail[0].msg;
+      }
+    } catch {
+      // ignore parse errors, keep default detail
+    }
+    throw new Error(detail);
   }
 
   return response.json() as Promise<T>;
