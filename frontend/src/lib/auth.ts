@@ -3,6 +3,7 @@ const TOKEN_KEY = "skillfindr_token";
 export function saveToken(token: string) {
   if (typeof window === "undefined") return;
   localStorage.setItem(TOKEN_KEY, token);
+  window.dispatchEvent(new Event("auth-change"));
 }
 
 export function getToken(): string | null {
@@ -13,6 +14,7 @@ export function getToken(): string | null {
 export function clearToken() {
   if (typeof window === "undefined") return;
   localStorage.removeItem(TOKEN_KEY);
+  window.dispatchEvent(new Event("auth-change"));
 }
 
 export function isLoggedIn() {

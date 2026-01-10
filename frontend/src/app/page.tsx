@@ -1,4 +1,16 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { isLoggedIn } from "../lib/auth";
+
 export default function Page() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setLoggedIn(isLoggedIn());
+  }, []);
+
   return (
     <div className="stack">
       <div className="hero">
@@ -9,12 +21,25 @@ export default function Page() {
             you split the time, swap knowledge, and both leave better than you arrived.
           </p>
           <div className="row" style={{ marginTop: 14 }}>
-            <a className="btn btn-primary" href="/signup">
-              Start a swap
-            </a>
-            <a className="btn" href="/matches">
-              See matches
-            </a>
+            {loggedIn ? (
+              <>
+                <Link className="btn btn-primary" href="/dashboard">
+                  Go to dashboard
+                </Link>
+                <Link className="btn" href="/matches">
+                  See matches
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link className="btn btn-primary" href="/signup">
+                  Start a swap
+                </Link>
+                <Link className="btn" href="/login">
+                  Log in
+                </Link>
+              </>
+            )}
           </div>
         </div>
         <div className="card">
