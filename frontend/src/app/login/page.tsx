@@ -1,9 +1,11 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import { fakeLogin } from "../../lib/auth";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [status, setStatus] = useState("");
@@ -13,6 +15,7 @@ export default function LoginPage() {
     setStatus("Authenticating...");
     await fakeLogin(email, password);
     setStatus("Logged in. Redirecting to matches...");
+    router.push("/matches");
   };
 
   return (

@@ -1,6 +1,6 @@
 import React from "react";
-import Link from "next/link";
 import "../styles/globals.css";
+import { TopNav } from "../components/TopNav";
 
 export const metadata = {
   title: "skillfindr",
@@ -12,18 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="app-shell">
         <div className="layout-container">
-          <header className="top-nav">
-            <div className="brand">
-              <span className="brand-dot" />
-              <span>SkillFindr</span>
-            </div>
-            <nav className="nav-links">
-              <Link href="/">Home</Link>
-              <Link href="/login">Login</Link>
-              <Link href="/signup">Signup</Link>
-              <Link href="/matches">Matches</Link>
-            </nav>
-          </header>
+          <TopNav />
           <main>{children}</main>
         </div>
       </body>

@@ -14,7 +14,6 @@ SkillFindr pairs two people so each can teach and learn a skill in the same sess
    python3 -m venv .venv
    source .venv/bin/activate
    python3 -m pip install fastapi 'uvicorn[standard]' sqlalchemy alembic 'python-jose[cryptography]' 'passlib[bcrypt]' 'psycopg[binary]'
-   cp ../.env.example ../.env   # adjust DATABASE_URL, JWT_SECRET, etc. if needed
    uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
    ```
    - Health check: http://localhost:8000/api/v1/health

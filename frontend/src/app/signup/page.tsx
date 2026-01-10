@@ -21,6 +21,10 @@ export default function SignupPage() {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    if (!name || !email || password.length < 6) {
+      setStatus("Name, email, and password (min 6 chars) are required.");
+      return;
+    }
     setSubmitting(true);
     setStatus("Creating account...");
 
