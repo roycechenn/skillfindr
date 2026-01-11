@@ -9,6 +9,7 @@ from app.models import Base
 ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://172.16.220.136:3000",
 ]
 
 
