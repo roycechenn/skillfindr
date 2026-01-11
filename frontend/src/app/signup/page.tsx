@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import { SkillPicker } from "../../components/SkillPicker";
 import { AvailabilityEditor } from "../../components/AvailabilityEditor";
 import { AvailabilitySlot, SkillInterest } from "../../lib/types";
@@ -10,6 +11,7 @@ import { saveToken } from "../../lib/auth";
 const skillBank = ["Python", "C++", "React", "Design", "Public Speaking", "Spanish", "Product", "Guitar", "SQL", "Cloud"];
 
 export default function SignupPage() {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,7 +35,8 @@ export default function SignupPage() {
         body: JSON.stringify({ name, email, password, teach, learn, availability }),
       });
       if (res?.token) saveToken(res.token);
-      setStatus("Account created. You are logged in.");
+      setStatus("Account created. Redirecting...");
+      router.push("/dashboard");
     } catch (error: any) {
       setStatus(error?.message ?? "Signup failed. Please try again.");
     } finally {
