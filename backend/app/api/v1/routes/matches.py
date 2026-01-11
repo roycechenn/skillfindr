@@ -1,4 +1,5 @@
-from collections import defaultdict
+import uuid
+import re
 from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -7,7 +8,6 @@ from sqlalchemy.orm import Session
 from app.core.deps import get_current_user
 from app.db.session import get_db
 from app.models.user import User
-from app.models.userskill import UserSkill
 
 router = APIRouter()
 
@@ -21,15 +21,12 @@ def _fetch_user(db: Session, user_id: int) -> User:
 
 @router.get("/")
 def list_matches(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    # Build teach/learn sets for current user
     teach_skills = {s.skill_name.lower() for s in current_user.skills if s.role == "teach"}
     learn_skills = {s.skill_name.lower() for s in current_user.skills if s.role == "learn"}
 
     if not teach_skills or not learn_skills:
         return []
 
-    # Fetch other users with overlapping skills
-    # Simple heuristic: reciprocal teach/learn intersection
     matches: List[dict] = []
     other_users = db.query(User).filter(User.id != current_user.id).all()
     for user in other_users:
@@ -38,7 +35,6 @@ def list_matches(current_user: User = Depends(get_current_user), db: Session = D
         if not user_teach or not user_learn:
             continue
 
-        # Basic compatibility score: count of reciprocal skills
         score = min(len(user_teach), len(user_learn)) * 25
         score = max(50, min(score, 100))
 
@@ -70,3 +66,18 @@ def list_matches(current_user: User = Depends(get_current_user), db: Session = D
         )
 
     return matches
+
+
+@router.post("/{match_id}/propose")
+def propose_swap(match_id: str, current_user: User = Depends(get_current_user)):
+    # Deterministic Jitsi link per match id so both sides share the same room.
+    # Normalize by sorting user ids embedded in the match id, if present.
+    ids = re.findall(r"\d+", match_id)
+    if len(ids) >= 2:
+        sorted_ids = sorted(ids[:2], key=int)
+        slug = f"match-{sorted_ids[0]}-{sorted_ids[1]}"
+    else:
+        slug = "".join(ch for ch in match_id if ch.isalnum()) or uuid.uuid4().hex[:10]
+    room_name = f"AppMeet-{slug}"
+    meeting_link = f"https://meet.jit.si/{room_name}"
+    return {"match_id": match_id, "meeting_link": meeting_link, "status": "proposed"}

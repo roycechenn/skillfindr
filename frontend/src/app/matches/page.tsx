@@ -35,8 +35,15 @@ export default function MatchesPage() {
     fetchMatches();
   }, [loggedIn]);
 
-  const handlePropose = (matchId: string) => {
-    setMessage(`Proposal sent. Swap ${matchId} will update once the backend responds.`);
+  const handlePropose = async (matchId: string) => {
+    try {
+      const res = await apiClient<{ meeting_link: string }>("/api/v1/matches/" + matchId + "/propose", {
+        method: "POST",
+      });
+      setMessage(res.meeting_link ? `Meeting link: ${res.meeting_link}` : "Proposal sent.");
+    } catch (error: any) {
+      setMessage(error?.message ?? "Failed to propose swap.");
+    }
   };
 
   return (
