@@ -2,7 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { fakeLogin } from "../../lib/auth";
+import { login } from "../../lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -13,9 +13,13 @@ export default function LoginPage() {
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setStatus("Authenticating...");
-    await fakeLogin(email, password);
-    setStatus("Logged in. Redirecting to matches...");
-    router.push("/matches");
+    try {
+      await login(email, password);
+      setStatus("Logged in. Redirecting to matches...");
+      router.push("/matches");
+    } catch (error: any) {
+      setStatus(error?.message ?? "Login failed");
+    }
   };
 
   return (

@@ -1,4 +1,5 @@
 const TOKEN_KEY = "skillfindr_token";
+import { apiClient } from "./api";
 
 export function saveToken(token: string) {
   if (typeof window === "undefined") return;
@@ -21,9 +22,11 @@ export function isLoggedIn() {
   return Boolean(getToken());
 }
 
-export async function fakeLogin(email: string, password: string) {
-  // Stubbed auth: pretend to get a JWT and persist it.
-  await new Promise((resolve) => setTimeout(resolve, 350));
-  saveToken(btoa(`${email}:${password}:${Date.now()}`));
-  return { email };
+export async function login(email: string, password: string) {
+  const res = await apiClient<{ access_token: string }>("/api/v1/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
+  if (res?.access_token) saveToken(res.access_token);
+  return res;
 }
