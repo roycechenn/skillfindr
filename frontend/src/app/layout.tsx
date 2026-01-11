@@ -1,6 +1,6 @@
 import React from "react";
 import "../styles/globals.css";
-import { TopNav } from "../components/TopNav";
+import { NavGate } from "../components/NavGate";
 
 export const metadata = {
   title: "skillfindr",
@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="app-shell">
         <div className="layout-container">
-          <TopNav />
+          <NavGate />
           <main>{children}</main>
         </div>
       </body>

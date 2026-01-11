@@ -3,13 +3,24 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { isLoggedIn } from "../lib/auth";
+import { ok } from "assert";
+
 
 export default function Page() {
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
-    setLoggedIn(isLoggedIn());
+    // Check login status (whatever your auth helper defines as "logged in")
+    const ok = isLoggedIn();
+    setLoggedIn(ok);
+
+    // If they're NOT logged in, send them to the welcome page
+    // so "/" becomes the post-login home page.
+    if (!ok) {
+      window.location.href = "/welcome";
+    }
   }, []);
+
 
   return (
     <div className="stack">

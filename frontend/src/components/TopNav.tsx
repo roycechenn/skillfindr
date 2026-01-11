@@ -37,6 +37,7 @@ export function TopNav() {
               onClick={() => {
                 clearToken();
                 setLoggedIn(false);
+                window.location.href = "/welcome";
               }}
             >
               Log out
